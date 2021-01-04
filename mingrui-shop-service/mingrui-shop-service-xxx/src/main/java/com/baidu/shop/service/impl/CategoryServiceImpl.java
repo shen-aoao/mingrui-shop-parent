@@ -1,5 +1,7 @@
 package com.baidu.shop.service.impl;
 
+import com.baidu.shop.entity.CategoryBrandEntity;
+import com.baidu.shop.mapper.CategoryBrandMapper;
 import com.baidu.shop.mapper.CategoryMapper;
 import com.baidu.shop.base.BaseApiService;
 import com.baidu.shop.base.Result;
@@ -27,6 +29,9 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Autowired
+    private CategoryBrandMapper categoryBrandMapper;
+
     @Override
     public Result<List<CategoryEntity>> getCategoryByid(Integer pid) {
         CategoryEntity categoryEntity = new CategoryEntity();
@@ -52,7 +57,12 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
         if(ObjectUtil.isNull(categoryEntity)) return this.setResultError("数据不存在");
 
         //判断当前节点是否为父节点
-        if(categoryEntity.getIsParent() == 1) return this.setResultError("当前节点为父错节点");//return之后的代码不会执行
+        if(categoryEntity.getIsParent() == 1) return this.setResultError("当前节点为父错节点");
+
+        Example example1 = new Example(CategoryBrandEntity.class);
+        example1.createCriteria().andEqualTo("brandId",id);
+        List<CategoryBrandEntity> categoryBrandEntities = categoryBrandMapper.selectByExample(example1);
+        if(categoryBrandEntities.size()>=1)return this.setResultError("当前分类被其他品牌绑定,无法进行删除");
 
         //通过当前节点的父节点id 查询 当前节点(将要被删除的节点)的父节点下是否还有其他子节点
         Example example = new Example(CategoryEntity.class);
