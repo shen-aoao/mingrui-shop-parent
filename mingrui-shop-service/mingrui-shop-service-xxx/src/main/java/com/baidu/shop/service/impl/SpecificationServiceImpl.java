@@ -91,6 +91,12 @@ public class SpecificationServiceImpl extends BaseApiService implements Specific
 
     @Override
     public Result<JSONObject> deleteParam(Integer id) {
+        Example example = new Example(SpecParamEntity.class);
+        example.createCriteria().andEqualTo("groupId",id);
+
+        List<SpecParamEntity> specParamEntities = specParamMapper.selectByExample(example);
+        if(specParamEntities.size() >= 1) return this.setResultError("下面有参数,不能删除");
+
         specParamMapper.deleteByPrimaryKey(id);
         return this.setResultSuccess();
     }

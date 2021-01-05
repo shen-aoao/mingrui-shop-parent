@@ -13,9 +13,6 @@ import java.util.List;
 @Api(tags = "商品接口")
 public interface GoodsService {
 
-    /*@ApiOperation(value = "获取spu信息")
-    @GetMapping(value = "goods/getSpuInfo")
-    public Result<List<SpuEntity>> getSpuInfo(SpuDTO spuDTO);*/
     @ApiOperation(value = "查询spu信息")
     @GetMapping(value = "/goods/getSpuInfo")
     Result<PageInfo<SpuEntity>> getSpuInfo(SpuDTO spuDTO);
