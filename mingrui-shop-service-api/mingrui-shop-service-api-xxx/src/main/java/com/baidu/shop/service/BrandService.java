@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(tags = "品牌接口")
 public interface BrandService {
 
@@ -29,4 +31,8 @@ public interface BrandService {
     @ApiOperation(value = "通过id删除品牌信息")
     @DeleteMapping(value="brand/delete")
     Result<JSONObject> deleteBrand(Integer id);
+
+    @ApiOperation(value = "通过分类id获取品牌")
+    @GetMapping(value="brand/getBrandByCategory")
+    public Result<List<BrandEntity>> getBrandByCategory(Integer cid);
 }
